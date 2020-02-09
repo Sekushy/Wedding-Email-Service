@@ -1,9 +1,13 @@
 import smtplib, requests
-from flask import Flask
+from flask import Flask, render_template
 from email.mime.text import MIMEText
 
 # Initialize the Flask service
 app = Flask(__name__)
+
+@app.route('/')
+def index():
+    return render_template('emailing.html')
 
 @app.route('/email', methods=['GET'])
 def send_email():
@@ -30,6 +34,7 @@ def send_email():
     with smtplib.SMTP(smtp_server, port) as server:
         server.login(login, password)
         server.sendmail(sender_email, reciever_email, msg.as_string())
+    return data
 
 if __name__ == "__main__":
     app.debug = True
